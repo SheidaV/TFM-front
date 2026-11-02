@@ -1,0 +1,20 @@
+<header class="topbar">
+  <a class="brand" [routerLink]="loggedIn() ? '/dashboard' : '/login'"
+    ><span class="brand-mark">◉</span> WePlanet</a
+  >
+
+  @if (loggedIn()) {
+    <div class="top-actions">
+      <button class="icon-button" aria-label="Notificaciones">♧</button>
+      <span class="notification-count">2</span>
+      <span class="avatar">{{ initials }}</span>
+      <strong>{{ user()?.name }} {{ user()?.surname }}</strong>
+      <button class="logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  } @else {
+    <nav class="top-actions">
+      <a routerLink="/login">Iniciar sesión</a>
+      <a routerLink="/register" class="register-link">Registrarse</a>
+    </nav>
+  }
+</header>

@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  :host {
+    display: block;
+  }
+}

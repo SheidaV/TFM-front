@@ -1,1 +1,63 @@
-<p>login works!</p>
+<main class="login-page">
+  <div class="login-grid">
+    <section class="intro-copy">
+      <p class="eyebrow">VIAJAR JUNTOS, MÁS FÁCIL</p>
+      <h1>Un viaje en grupo.<br />Un plan compartido.</h1>
+      <p>
+        Reúne las ideas de todos, decidid qué os apetece y cread vuestro próximo itinerario en un
+        solo lugar.
+      </p>
+      <div class="travel-preview">
+        <div class="image-placeholder">Destino compartido · Vista del viaje</div>
+        <div class="preview-tags">
+          <span>⌖ Proponed</span><span>☑ Votad</span><span>▣ Organizad</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-card">
+      <h2>¡Hola de nuevo!</h2>
+      <p>Inicia sesión para seguir planificando.</p>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        @if (errorMessage()) {
+          <div class="feedback">{{ errorMessage() }}</div>
+        }
+
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="ana@ejemplo.com" [formControl]="email" />
+        @if (email.errors && isValidForm() === false) {
+          <div class="error">
+            @if (email.errors['required']) {
+              <div>El correo es obligatorio</div>
+            }
+            @if (email.errors['email']) {
+              <div>El formato del correo no es válido</div>
+            }
+          </div>
+        }
+
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" placeholder="••••••••••" [formControl]="password" />
+        @if (password.errors && isValidForm() === false) {
+          <div class="error">
+            @if (password.errors['required']) {
+              <div>La contraseña es obligatoria</div>
+            }
+            @if (password.errors['minlength']) {
+              <div>La contraseña debe tener al menos 8 caracteres</div>
+            }
+            @if (password.errors['maxlength']) {
+              <div>La contraseña puede tener 16 caracteres como máximo</div>
+            }
+          </div>
+        }
+
+        <a class="forgot">¿Has olvidado tu contraseña?</a>
+        <button type="submit">Iniciar sesión</button>
+      </form>
+      <small>Accede a tu panel de viajes compartidos.</small>
+      <div class="separator"></div>
+      <p class="register">¿Aún no tienes cuenta? <a routerLink="/register">Crear una cuenta</a></p>
+    </section>
+  </div>
+</main>

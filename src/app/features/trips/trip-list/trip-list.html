@@ -1,1 +1,59 @@
-<p>trip-list works!</p>
+<section class="page">
+  <div class="page-heading">
+    <div>
+      <h1>Mis viajes</h1>
+      <p>Hola, {{ user()?.name }}. Aquí empieza vuestra próxima aventura.</p>
+    </div>
+    <button class="primary">＋ Crear nuevo viaje</button>
+  </div>
+  <div class="stats">
+    <article><strong>#num</strong><span>Viajes</span></article>
+    <article><strong>#num</strong><span>Propuestas</span></article>
+    <article><strong>#num</strong><span>Votaciones pendientes</span></article>
+  </div>
+  <div class="tabs">
+    <b>Todos (3)</b><span>Próximos (2)</span><span>Finalizados (1)</span
+    ><small>Orden: más próximos⌄</small>
+  </div>
+  <div class="trip-grid">
+    <article class="trip-card">
+      <div class="trip-image">Granada, España</div>
+      <span class="status blue">En planificación</span>
+      <h2>Escapada a Granada</h2>
+      <p>▣ 14–17 mayo 2027</p>
+      <p>♧ 4 participantes</p>
+      <a routerLink="/trips/granada">Ver viaje <b>→</b></a>
+    </article>
+    <article class="trip-card">
+      <div class="trip-image">Lisboa, Portugal</div>
+      <span class="status orange">Por organizar</span>
+      <h2>Verano en Lisboa</h2>
+      <p>▣ 8–12 julio 2027</p>
+      <p>♧ 6 participantes</p>
+      <a>Ver viaje <b>→</b></a>
+    </article>
+    <article class="trip-card">
+      <div class="trip-image">Valencia, España</div>
+      <span class="status green">Finalizado</span>
+      <h2>Fin de semana en Valencia</h2>
+      <p>▣ 19–21 febrero 2027</p>
+      <p>♧ 3 participantes</p>
+      <a>Ver viaje <b>→</b></a>
+    </article>
+  </div>
+  <article class="activity">
+    <div class="section-title">
+      <h2>Actividad reciente</h2>
+      <small>Hoy, 6 de mayo</small>
+    </div>
+    <p>
+      <b>MA</b> Marta propuso Mirador de San Nicolás
+      <small>Propuesta pendiente de votación · Hace 20 min</small>
+    </p>
+    <p><b>DS</b> Diego votó por la Ruta de tapas <small>1 de 4 votos a favor · Hace 1 h</small></p>
+    <p>
+      <b>PV</b> Pablo confirmó su participación
+      <small>Ya estáis los 4 en el grupo · Hace 2 h</small>
+    </p>
+  </article>
+</section>
