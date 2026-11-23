@@ -1,32 +1,34 @@
-<main class="login-page">
-  <div class="login-grid">
-    <section class="intro-copy">
-      <p class="eyebrow">VIAJAR JUNTOS, MÁS FÁCIL</p>
-      <h1>Un viaje en grupo.<br />Un plan compartido.</h1>
-      <p>
+<main class="login">
+  <div class="login__grid">
+    <section class="login__intro">
+      <p class="login__eyebrow">VIAJAR JUNTOS, MÁS FÁCIL</p>
+      <h1 class="login__title">Un viaje en grupo.<br />Un plan compartido.</h1>
+      <p class="login__lead">
         Reúne las ideas de todos, decidid qué os apetece y cread vuestro próximo itinerario en un
         solo lugar.
       </p>
-      <div class="travel-preview">
-        <div class="image-placeholder">Destino compartido · Vista del viaje</div>
-        <div class="preview-tags">
-          <span>⌖ Proponed</span><span>☑ Votad</span><span>▣ Organizad</span>
+      <div class="login__preview">
+        <div class="login__preview-image">Destino compartido · Vista del viaje</div>
+        <div class="login__preview-tags">
+          <span class="login__preview-tag">⌖ Proponed</span
+          ><span class="login__preview-tag">☑ Votad</span
+          ><span class="login__preview-tag">▣ Organizad</span>
         </div>
       </div>
     </section>
 
-    <section class="login-card">
-      <h2>¡Hola de nuevo!</h2>
-      <p>Inicia sesión para seguir planificando.</p>
+    <section class="login__card">
+      <h2 class="login__card-title">¡Hola de nuevo!</h2>
+      <p class="login__card-text">Inicia sesión para seguir planificando.</p>
       <form [formGroup]="loginForm" (ngSubmit)="login()">
         @if (errorMessage()) {
-          <div class="feedback">{{ errorMessage() }}</div>
+          <div class="alert alert--error login__alert">{{ errorMessage() }}</div>
         }
 
         <label for="email">Correo electrónico</label>
         <input id="email" type="email" placeholder="ana@ejemplo.com" [formControl]="email" />
         @if (email.errors && isValidForm() === false) {
-          <div class="error">
+          <div class="form-error">
             @if (email.errors['required']) {
               <div>El correo es obligatorio</div>
             }
@@ -39,7 +41,7 @@
         <label for="password">Contraseña</label>
         <input id="password" type="password" placeholder="••••••••••" [formControl]="password" />
         @if (password.errors && isValidForm() === false) {
-          <div class="error">
+          <div class="form-error">
             @if (password.errors['required']) {
               <div>La contraseña es obligatoria</div>
             }
@@ -52,12 +54,14 @@
           </div>
         }
 
-        <a class="forgot">¿Has olvidado tu contraseña?</a>
-        <button type="submit">Iniciar sesión</button>
+        <a class="login__forgot">¿Has olvidado tu contraseña?</a>
+        <button class="btn btn--block" type="submit">Iniciar sesión</button>
       </form>
-      <small>Accede a tu panel de viajes compartidos.</small>
+      <small class="login__note">Accede a tu panel de viajes compartidos.</small>
       <div class="separator"></div>
-      <p class="register">¿Aún no tienes cuenta? <a routerLink="/register">Crear una cuenta</a></p>
+      <p class="login__register">
+        ¿Aún no tienes cuenta? <a routerLink="/register">Crear una cuenta</a>
+      </p>
     </section>
   </div>
 </main>

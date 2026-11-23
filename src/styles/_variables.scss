@@ -1,0 +1,39 @@
+// design values
+
+// colors
+$color-primary: #1976d2;
+$color-primary-soft: #eaf4ff;
+$color-text: #12355b;
+$color-text-secondary: #61758b;
+$color-muted: #71879e;
+$color-white: #fff;
+$color-background: #f7fbff;
+
+// borders
+$color-border: #d5e2ef;
+$color-border-input: #cbdceb;
+$color-divider: #dce8f4;
+
+// states
+$color-danger: #d32f2f;
+$color-danger-soft: #fdeeee;
+$color-danger-border: #f2c0c0;
+$color-success: #2e7d32;
+$color-success-soft: #eaf7ee;
+$color-success-border: #b7dfc1;
+$color-warning: #a66000;
+$color-warning-soft: #fff1df;
+$color-finished: #28794a;
+$color-finished-soft: #e4f5ea;
+$color-owner: #5b3fb0;
+$color-owner-soft: #f1eefc;
+
+// shapes
+$radius-small: 6px;
+$radius: 10px;
+$shadow-card: 0 12px 30px rgba($color-text, 0.05);
+$shadow-popup: 0 12px 30px rgba($color-text, 0.1);
+
+// breakpoints
+$breakpoint-tablet: 850px;
+$breakpoint-mobile: 760px;

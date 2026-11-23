@@ -1,0 +1,26 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "selector-class-pattern": [
+      "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+      {
+        "message": "La clase \"%s\" no sigue BEM: bloque, bloque__elemento o bloque__elemento--modificador (en minúsculas y con guiones)",
+        "resolveNestedSelectors": true
+      }
+    ],
+    "color-no-hex": [
+      true,
+      {
+        "message": "Usa una variable de src/styles/_variables.scss en lugar de un color escrito a mano"
+      }
+    ],
+    "selector-type-no-unknown": [true, { "ignore": ["custom-elements"] }],
+    "no-empty-source": null
+  },
+  "overrides": [
+    {
+      "files": ["src/styles/_variables.scss"],
+      "rules": { "color-no-hex": null }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+<div class="place-autocomplete">
+  <input
+    class="place-autocomplete__input"
+    type="text"
+    autocomplete="off"
+    role="combobox"
+    aria-autocomplete="list"
+    [attr.aria-expanded]="open()"
+    [attr.aria-controls]="inputId() + '-list'"
+    [id]="inputId()"
+    [placeholder]="placeholder()"
+    [value]="text()"
+    [disabled]="disabled()"
+    (input)="onInput($event)"
+    (keydown)="onKeydown($event)"
+    (blur)="onBlur()"
+  />
+  @if (searching()) {
+    <span class="place-autocomplete__searching">Buscando...</span>
+  }
+
+  @if (open()) {
+    <ul class="place-autocomplete__list" role="listbox" [id]="inputId() + '-list'">
+      @for (place of suggestions(); track place.name; let i = $index) {
+        <li
+          class="place-autocomplete__option"
+          role="option"
+          [class.place-autocomplete__option--active]="i === activeIndex()"
+          [attr.aria-selected]="i === activeIndex()"
+          (mousedown)="select(place)"
+        >
+          <span class="place-autocomplete__option-name">{{ place.name }}</span>
+          @if (place.type) {
+            <small class="place-autocomplete__option-type">{{ place.type }}</small>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

@@ -1,48 +1,127 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@use 'variables' as *;
 
+// global styles, BEM naming
+
+// generic
 * {
   box-sizing: border-box;
 }
+
+// elements
 html,
 body {
   margin: 0;
   min-height: 100%;
   font-family: Inter, Arial, sans-serif;
-  background: #f7fbff;
+  background: $color-background;
+  color: $color-text;
 }
 
-.content {
-  display: flex;
-  justify-content: space-around;
+a {
+  color: $color-primary;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+label {
+  display: block;
+  margin: 16px 0 8px;
+  font-weight: 650;
+  font-size: 13px;
+}
+
+input {
   width: 100%;
-  max-width: 700px;
-  margin-bottom: 3rem;
+  padding: 14px;
+  border: 1px solid $color-border-input;
+  border-radius: $radius-small;
+  font: inherit;
 }
 
-.content h1 {
-  margin-top: 1.75rem;
-}
+// global components
 
-.content p {
-  margin-top: 1.5rem;
-}
+// button
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 1px solid $color-primary;
+  border-radius: $radius-small;
+  background: $color-primary;
+  color: $color-white;
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
 
-.divider {
-  width: 1px;
-  background: var(--red-to-pink-to-purple-vertical-gradient);
-  margin-inline: 0.5rem;
-}
-
-@media screen and (max-width: 650px) {
-  .content {
-    flex-direction: column;
-    width: max-content;
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
   }
 
-  .divider {
-    height: 1px;
+  &--outline {
+    background: $color-white;
+    color: $color-primary;
+  }
+
+  &--danger {
+    border-color: $color-danger;
+    background: $color-white;
+    color: $color-danger;
+  }
+
+  &--small {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  &--block {
     width: 100%;
-    background: var(--red-to-pink-to-purple-horizontal-gradient);
-    margin-block: 1.5rem;
+    padding: 14px;
+    font-size: 15px;
   }
+}
+
+// alert message
+.alert {
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: $radius-small;
+  font-size: 13px;
+
+  &--error {
+    border-color: $color-danger-border;
+    background: $color-danger-soft;
+    color: $color-danger;
+  }
+
+  &--success {
+    border-color: $color-success-border;
+    background: $color-success-soft;
+    color: $color-success;
+  }
+}
+
+// field messages
+.form-error,
+.form-hint {
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.form-error {
+  color: $color-danger;
+}
+
+.form-hint {
+  color: $color-muted;
+}
+
+.separator {
+  height: 1px;
+  margin: 25px 0;
+  background: $color-divider;
 }

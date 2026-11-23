@@ -1,56 +1,97 @@
-<section class="detail-page">
-  <div class="detail-heading">
-    <div>
-      <h1>Viaje 1</h1>
-      <p>Lugar · Fechas · Período</p>
-    </div>
-    <button>＋ Añadir propuesta</button>
-  </div>
-  <div class="breadcrumbs">Mis viajes　/　Escapada a Granada　/　Resumen</div>
-  <nav class="trip-tabs">
-    <b>Resumen</b><span>Propuestas</span><span>Votaciones</span><span>Itinerario</span>
-  </nav>
-  <article class="destination">
-    <div class="destination-image">Vista del destino · Alhambra y barrio del Albaicín</div>
-    <div>
-      <h2>Granada, para descubrirla juntos</h2>
-      <p>Viaje compartido · En planificación</p>
-    </div>
-  </article>
-  <div class="participants">
-    <strong>El grupo · 4</strong><span>LR　ana (tú)</span><span>DS　Diego</span
-    ><span>MA　Marta</span><span>PV　Pablo</span><button>♙ Invitar participantes</button>
-  </div>
-  <div class="content-grid">
-    <article class="panel">
-      <div class="panel-heading">
-        <h2>Preferencias del grupo</h2>
-        <small>4 de 4 respuestas</small>
+<section class="trip-detail">
+  @if (errorMessage()) {
+    <div class="alert alert--error trip-detail__alert">{{ errorMessage() }}</div>
+    <a routerLink="/dashboard">← Volver a mis viajes</a>
+  }
+
+  @if (trip(); as trip) {
+    <div class="trip-detail__heading">
+      <div>
+        <h1 class="trip-detail__title">{{ trip.name }}</h1>
+        <p class="trip-detail__subtitle">
+          {{ trip.destination }} · {{ trip.start_date | date: 'd MMM' }} –
+          {{ trip.end_date | date: 'd MMM y' }}
+        </p>
       </div>
-      <div class="preference-grid">
-        <div>
-          <small>Intereses</small><strong>Cultura y gastronomía</strong
-          ><span>Paseos y lugares locales</span>
+      @if (isOwner()) {
+        <div class="trip-detail__actions">
+          <a class="btn btn--outline btn--small" [routerLink]="['/trips', trip.id, 'edit']"
+            >Editar</a
+          >
+          <button class="btn btn--danger btn--small" (click)="deleteTrip()">Eliminar</button>
         </div>
-        <div>
-          <small>Presupuesto</small><strong>50–80 € / día</strong
-          ><span>Por persona, sin alojamiento</span>
-        </div>
-        <div><small>Ritmo</small><strong>Tranquilo</strong><span>2–3 actividades al día</span></div>
+      }
+    </div>
+
+    <div class="trip-detail__breadcrumbs">
+      <a routerLink="/dashboard">Mis viajes</a> / {{ trip.name }} / Resumen
+    </div>
+
+    <nav class="trip-detail__tabs">
+      <span class="trip-detail__tab trip-detail__tab--active">Resumen</span
+      ><span class="trip-detail__tab">Propuestas</span
+      ><span class="trip-detail__tab">Votaciones</span
+      ><span class="trip-detail__tab">Itinerario</span>
+    </nav>
+
+    <article class="trip-detail__destination">
+      <div class="trip-detail__map">
+        @if (trip.destination_lat !== null && trip.destination_lon !== null) {
+          <app-trip-map
+            [lat]="trip.destination_lat"
+            [lon]="trip.destination_lon"
+            [label]="trip.destination"
+          />
+        } @else {
+          {{ trip.destination }}
+        }
+      </div>
+      <div>
+        <h2 class="trip-detail__destination-title">
+          {{ trip.destination }}, para descubrirlo juntos
+        </h2>
+        <p class="trip-detail__destination-text">
+          Viaje compartido · {{ statusLabels[status()!] }} ·
+          {{ isOwner() ? 'Organizas tú' : 'Participas' }}
+        </p>
+        @if (googleMapsUrl(); as url) {
+          <a class="trip-detail__maps-link" [href]="url" target="_blank" rel="noopener"
+            >Ver en Google Maps ↗</a
+          >
+        }
       </div>
     </article>
-    <article class="panel">
-      <h2>Así va vuestro viaje</h2>
-      <p class="metric"><b>5</b> Propuestas del grupo <small>3 aceptadas · 2 pendientes</small></p>
-      <p class="metric">
-        <b>2</b> Votaciones abiertas <small>Falta tu voto en ambas opciones</small>
-      </p>
-      <p class="metric">
-        <b>3</b> Actividades en el itinerario <small>Viernes 14 · Día en revisión</small>
-      </p>
-      <div class="warning">
-        Hay un horario que revisar<br /><small>El almuerzo y el paseo se solapan 30 minutos.</small>
+
+    <article class="trip-detail__panel">
+      <h2 class="trip-detail__panel-title">Datos del viaje</h2>
+      <div class="trip-detail__info">
+        <div class="trip-detail__info-item">
+          <small class="trip-detail__info-label">Fechas</small>
+          <strong class="trip-detail__info-value"
+            >{{ trip.start_date | date: 'd MMM' }} – {{ trip.end_date | date: 'd MMM y' }}</strong
+          >
+          <span class="trip-detail__info-detail"
+            >{{ days() }} día{{ days() === 1 ? '' : 's' }}</span
+          >
+        </div>
+        <div class="trip-detail__info-item">
+          <small class="trip-detail__info-label">Presupuesto</small>
+          @if (trip.budget !== null) {
+            <strong class="trip-detail__info-value">{{ trip.budget | number: '1.0-2' }} €</strong>
+            <span class="trip-detail__info-detail">Por persona</span>
+          } @else {
+            <strong class="trip-detail__info-value">Sin definir</strong>
+            <span class="trip-detail__info-detail">Se puede añadir al editar</span>
+          }
+        </div>
+        <div class="trip-detail__info-item">
+          <small class="trip-detail__info-label">Grupo</small>
+          <strong class="trip-detail__info-value">
+            {{ trip.participants_count }} participante{{ trip.participants_count === 1 ? '' : 's' }}
+          </strong>
+          <span class="trip-detail__info-detail">Invitaciones en la siguiente iteración</span>
+        </div>
       </div>
     </article>
-  </div>
+  }
 </section>

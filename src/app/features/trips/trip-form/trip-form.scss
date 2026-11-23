@@ -1,0 +1,61 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+:host {
+  display: block;
+  color: $color-text;
+}
+
+.trip-form {
+  padding: 48px 40px;
+
+  &__card {
+    max-width: 560px;
+    margin: auto;
+    padding: 32px;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+    background: $color-white;
+  }
+
+  &__back {
+    font-size: 13px;
+  }
+
+  &__title {
+    margin: 16px 0 8px;
+    font-size: 30px;
+  }
+
+  &__text {
+    margin: 0 0 20px;
+    color: $color-muted;
+  }
+
+  &__alert {
+    margin-bottom: 8px;
+  }
+
+  &__optional {
+    color: $color-muted;
+    font-weight: 400;
+  }
+
+  &__dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  &__submit {
+    margin-top: 24px;
+  }
+
+  @include tablet {
+    padding: 28px 16px;
+
+    &__dates {
+      grid-template-columns: 1fr;
+    }
+  }
+}

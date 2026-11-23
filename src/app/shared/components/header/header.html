@@ -1,20 +1,20 @@
 <header class="topbar">
-  <a class="brand" [routerLink]="loggedIn() ? '/dashboard' : '/login'"
-    ><span class="brand-mark">◉</span> WePlanet</a
+  <a class="topbar__brand" [routerLink]="loggedIn() ? '/dashboard' : '/login'"
+    ><span class="topbar__brand-mark">◉</span> WePlanet</a
   >
 
   @if (loggedIn()) {
-    <div class="top-actions">
-      <button class="icon-button" aria-label="Notificaciones">♧</button>
-      <span class="notification-count">2</span>
-      <span class="avatar">{{ initials }}</span>
-      <strong>{{ user()?.name }} {{ user()?.surname }}</strong>
-      <button class="logout" (click)="logout()">Cerrar sesión</button>
+    <div class="topbar__actions">
+      <button class="topbar__icon-button" aria-label="Notificaciones">♧</button>
+      <span class="topbar__badge">2</span>
+      <span class="topbar__avatar">{{ initials }}</span>
+      <strong class="topbar__user-name">{{ user()?.name }} {{ user()?.surname }}</strong>
+      <button class="btn btn--outline btn--small" (click)="logout()">Cerrar sesión</button>
     </div>
   } @else {
-    <nav class="top-actions">
-      <a routerLink="/login">Iniciar sesión</a>
-      <a routerLink="/register" class="register-link">Registrarse</a>
+    <nav class="topbar__actions">
+      <a class="topbar__link" routerLink="/login">Iniciar sesión</a>
+      <a class="btn btn--small" routerLink="/register">Registrarse</a>
     </nav>
   }
 </header>

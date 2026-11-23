@@ -1,1 +1,93 @@
-<p>trip-form works!</p>
+<section class="trip-form">
+  <div class="trip-form__card">
+    <a class="trip-form__back" [routerLink]="isEdit ? ['/trips', tripId] : '/dashboard'"
+      >← Volver</a
+    >
+    <h1 class="trip-form__title">{{ isEdit ? 'Editar viaje' : 'Nuevo viaje' }}</h1>
+    <p class="trip-form__text">
+      {{
+        isEdit
+          ? 'Cambia los datos básicos del viaje.'
+          : 'Empieza con lo básico. Luego podrás invitar al grupo.'
+      }}
+    </p>
+
+    <form [formGroup]="tripForm" (ngSubmit)="save()">
+      @if (errorMessage()) {
+        <div class="alert alert--error trip-form__alert">{{ errorMessage() }}</div>
+      }
+
+      <label for="name">Nombre del viaje</label>
+      <input id="name" type="text" placeholder="Escapada a Granada" [formControl]="name" />
+      @if (name.errors && isValidForm() === false) {
+        <div class="form-error">
+          @if (name.errors['required']) {
+            <div>El nombre es obligatorio</div>
+          }
+          @if (name.errors['minlength']) {
+            <div>El nombre debe tener al menos 3 caracteres</div>
+          }
+          @if (name.errors['maxlength']) {
+            <div>El nombre puede tener 100 caracteres como máximo</div>
+          }
+        </div>
+      }
+
+      <label for="destination">Destino</label>
+      <app-place-autocomplete inputId="destination" [formControl]="destination" />
+      @if (oldDestination() && !destination.value) {
+        <div class="form-hint">
+          Destino actual: <b>{{ oldDestination() }}</b
+          >. Vuelve a buscarlo y elígelo de la lista para poder verlo en el mapa.
+        </div>
+      }
+      @if (destination.errors && isValidForm() === false) {
+        <div class="form-error">Busca el destino y elige una de las opciones de la lista</div>
+      }
+
+      <div class="trip-form__dates">
+        <div>
+          <label for="start_date">Fecha de inicio</label>
+          <input id="start_date" type="date" [formControl]="start_date" />
+          @if (start_date.errors && isValidForm() === false) {
+            <div class="form-error">La fecha de inicio es obligatoria</div>
+          }
+        </div>
+        <div>
+          <label for="end_date">Fecha de fin</label>
+          <input
+            id="end_date"
+            type="date"
+            [attr.min]="start_date.value || null"
+            [formControl]="end_date"
+          />
+          @if (end_date.errors && isValidForm() === false) {
+            <div class="form-error">La fecha de fin es obligatoria</div>
+          }
+        </div>
+      </div>
+      @if (tripForm.errors?.['datesOrder'] && isValidForm() === false) {
+        <div class="form-error">La fecha de fin no puede ser anterior a la de inicio</div>
+      }
+
+      <label for="budget"
+        >Presupuesto por persona (€) <small class="trip-form__optional">opcional</small></label
+      >
+      <input
+        id="budget"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="400"
+        [formControl]="budget"
+      />
+      @if (budget.errors && isValidForm() === false) {
+        <div class="form-error">El presupuesto no puede ser negativo</div>
+      }
+
+      <button class="btn btn--block trip-form__submit" type="submit" [disabled]="saving()">
+        {{ isEdit ? 'Guardar cambios' : 'Crear viaje' }}
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,59 +1,92 @@
-<section class="page">
-  <div class="page-heading">
+<section class="trip-list">
+  <div class="trip-list__heading">
     <div>
-      <h1>Mis viajes</h1>
-      <p>Hola, {{ user()?.name }}. Aquí empieza vuestra próxima aventura.</p>
+      <h1 class="trip-list__title">Mis viajes</h1>
+      <p class="trip-list__subtitle">
+        Hola, {{ user()?.name }}. Aquí empieza vuestra próxima aventura.
+      </p>
     </div>
-    <button class="primary">＋ Crear nuevo viaje</button>
+    <a class="btn" routerLink="/trips/new">＋ Crear nuevo viaje</a>
   </div>
-  <div class="stats">
-    <article><strong>#num</strong><span>Viajes</span></article>
-    <article><strong>#num</strong><span>Propuestas</span></article>
-    <article><strong>#num</strong><span>Votaciones pendientes</span></article>
-  </div>
-  <div class="tabs">
-    <b>Todos (3)</b><span>Próximos (2)</span><span>Finalizados (1)</span
-    ><small>Orden: más próximos⌄</small>
-  </div>
-  <div class="trip-grid">
-    <article class="trip-card">
-      <div class="trip-image">Granada, España</div>
-      <span class="status blue">En planificación</span>
-      <h2>Escapada a Granada</h2>
-      <p>▣ 14–17 mayo 2027</p>
-      <p>♧ 4 participantes</p>
-      <a routerLink="/trips/granada">Ver viaje <b>→</b></a>
+
+  <div class="trip-list__stats">
+    <article class="trip-list__stat">
+      <strong class="trip-list__stat-value">{{ trips().length }}</strong
+      ><span class="trip-list__stat-label">Viajes</span>
     </article>
-    <article class="trip-card">
-      <div class="trip-image">Lisboa, Portugal</div>
-      <span class="status orange">Por organizar</span>
-      <h2>Verano en Lisboa</h2>
-      <p>▣ 8–12 julio 2027</p>
-      <p>♧ 6 participantes</p>
-      <a>Ver viaje <b>→</b></a>
+    <article class="trip-list__stat">
+      <strong class="trip-list__stat-value">{{ upcomingTrips().length }}</strong
+      ><span class="trip-list__stat-label">Próximos</span>
     </article>
-    <article class="trip-card">
-      <div class="trip-image">Valencia, España</div>
-      <span class="status green">Finalizado</span>
-      <h2>Fin de semana en Valencia</h2>
-      <p>▣ 19–21 febrero 2027</p>
-      <p>♧ 3 participantes</p>
-      <a>Ver viaje <b>→</b></a>
+    <article class="trip-list__stat">
+      <strong class="trip-list__stat-value">{{ finishedTrips().length }}</strong
+      ><span class="trip-list__stat-label">Finalizados</span>
     </article>
   </div>
-  <article class="activity">
-    <div class="section-title">
-      <h2>Actividad reciente</h2>
-      <small>Hoy, 6 de mayo</small>
+
+  <div class="trip-list__tabs">
+    <button
+      class="trip-list__tab"
+      [class.trip-list__tab--active]="filter() === 'all'"
+      (click)="filter.set('all')"
+    >
+      Todos ({{ trips().length }})
+    </button>
+    <button
+      class="trip-list__tab"
+      [class.trip-list__tab--active]="filter() === 'upcoming'"
+      (click)="filter.set('upcoming')"
+    >
+      Próximos ({{ upcomingTrips().length }})
+    </button>
+    <button
+      class="trip-list__tab"
+      [class.trip-list__tab--active]="filter() === 'finished'"
+      (click)="filter.set('finished')"
+    >
+      Finalizados ({{ finishedTrips().length }})
+    </button>
+    <small class="trip-list__order">Orden: más próximos</small>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert--error trip-list__alert">{{ errorMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="trip-list__empty">Cargando viajes...</p>
+  } @else if (visibleTrips().length === 0) {
+    <div class="trip-list__empty">
+      @if (trips().length === 0) {
+        <p>Todavía no tienes ningún viaje.</p>
+        <a class="trip-list__empty-link" routerLink="/trips/new">Crea el primero</a>
+      } @else {
+        <p>No hay viajes en esta categoría.</p>
+      }
     </div>
-    <p>
-      <b>MA</b> Marta propuso Mirador de San Nicolás
-      <small>Propuesta pendiente de votación · Hace 20 min</small>
-    </p>
-    <p><b>DS</b> Diego votó por la Ruta de tapas <small>1 de 4 votos a favor · Hace 1 h</small></p>
-    <p>
-      <b>PV</b> Pablo confirmó su participación
-      <small>Ya estáis los 4 en el grupo · Hace 2 h</small>
-    </p>
-  </article>
+  } @else {
+    <div class="trip-list__grid">
+      @for (trip of visibleTrips(); track trip.id) {
+        <article class="trip-card">
+          <div class="trip-card__image">{{ trip.destination }}</div>
+          <span class="trip-card__status" [class]="'trip-card__status--' + status(trip)">{{
+            statusLabels[status(trip)]
+          }}</span>
+          @if (trip.role === 'owner') {
+            <span class="trip-card__status trip-card__status--owner">Organizas tú</span>
+          }
+          <h2 class="trip-card__title">{{ trip.name }}</h2>
+          <p class="trip-card__info">
+            ▣ {{ trip.start_date | date: 'd MMM' }} – {{ trip.end_date | date: 'd MMM y' }}
+          </p>
+          <p class="trip-card__info">
+            ♧ {{ trip.participants_count }} participante{{
+              trip.participants_count === 1 ? '' : 's'
+            }}
+          </p>
+          <a class="trip-card__link" [routerLink]="['/trips', trip.id]">Ver viaje <b>→</b></a>
+        </article>
+      }
+    </div>
+  }
 </section>

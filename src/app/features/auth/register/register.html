@@ -1,20 +1,20 @@
-<main class="register-page">
-  <section class="register-card">
-    <h2>Crea tu cuenta</h2>
-    <p>Regístrate para empezar a planificar viajes en grupo.</p>
+<main class="register">
+  <section class="register__card">
+    <h2 class="register__title">Crea tu cuenta</h2>
+    <p class="register__text">Regístrate para empezar a planificar viajes en grupo.</p>
 
     <form [formGroup]="registerForm" (ngSubmit)="register()">
       @if (errorMessage()) {
-        <div class="feedback error-box">{{ errorMessage() }}</div>
+        <div class="alert alert--error register__alert">{{ errorMessage() }}</div>
       }
       @if (successMessage()) {
-        <div class="feedback ok-box">{{ successMessage() }}</div>
+        <div class="alert alert--success register__alert">{{ successMessage() }}</div>
       }
 
       <label for="name">Nombre</label>
       <input id="name" type="text" [formControl]="name" />
       @if (name.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (name.errors['required']) {
             <div>El nombre es obligatorio</div>
           }
@@ -30,7 +30,7 @@
       <label for="surname">Apellido</label>
       <input id="surname" type="text" [formControl]="surname" />
       @if (surname.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (surname.errors['required']) {
             <div>El apellido es obligatorio</div>
           }
@@ -46,7 +46,7 @@
       <label for="alias">Alias</label>
       <input id="alias" type="text" [formControl]="alias" />
       @if (alias.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (alias.errors['required']) {
             <div>El alias es obligatorio</div>
           }
@@ -62,7 +62,7 @@
       <label for="birth_date">Fecha de nacimiento</label>
       <input id="birth_date" type="date" [formControl]="birth_date" />
       @if (birth_date.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (birth_date.errors['required']) {
             <div>La fecha de nacimiento es obligatoria</div>
           }
@@ -72,7 +72,7 @@
       <label for="email">Correo electrónico</label>
       <input id="email" type="email" placeholder="ana@ejemplo.com" [formControl]="email" />
       @if (email.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (email.errors['required']) {
             <div>El correo es obligatorio</div>
           }
@@ -90,7 +90,7 @@
         [formControl]="password"
       />
       @if (password.errors && isValidForm() === false) {
-        <div class="error">
+        <div class="form-error">
           @if (password.errors['required']) {
             <div>La contraseña es obligatoria</div>
           }
@@ -103,10 +103,10 @@
         </div>
       }
 
-      <button type="submit">Crear cuenta</button>
+      <button class="btn btn--block register__submit" type="submit">Crear cuenta</button>
     </form>
 
     <div class="separator"></div>
-    <p class="login-link">¿Ya tienes cuenta? <a routerLink="/login">Iniciar sesión</a></p>
+    <p class="register__login-link">¿Ya tienes cuenta? <a routerLink="/login">Iniciar sesión</a></p>
   </section>
 </main>

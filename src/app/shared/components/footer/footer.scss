@@ -1,14 +1,16 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 .footer {
   display: flex;
   justify-content: space-between;
   padding: 22px 32px;
-  border-top: 1px solid #dce8f4;
-  background: #fff;
-  color: #7a8ea3;
+  border-top: 1px solid $color-divider;
+  background: $color-white;
+  color: $color-muted;
   font-size: 12px;
-}
-@media (max-width: 760px) {
-  .footer {
+
+  @include mobile {
     padding: 18px 16px;
     gap: 12px;
     flex-direction: column;

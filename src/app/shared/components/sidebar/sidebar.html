@@ -1,14 +1,16 @@
 <aside class="sidebar">
-  <p class="section-label">MI ESPACIO</p>
-  <a routerLink="/dashboard" routerLinkActive="active" class="nav-item"
-    >▣ <span>Mis viajes</span></a
+  <p class="sidebar__label">MI ESPACIO</p>
+  <a class="sidebar__link" routerLink="/dashboard" routerLinkActive="sidebar__link--active"
+    >▣ <span class="sidebar__link-text">Mis viajes</span></a
   >
-  <a routerLink="/calendar" routerLinkActive="active" class="nav-item">▦ <span>Calendario</span></a>
-  <a routerLink="/notifications" routerLinkActive="active" class="nav-item"
-    >♧ <span>Notificaciones</span></a
+  <a class="sidebar__link" routerLink="/calendar" routerLinkActive="sidebar__link--active"
+    >▦ <span class="sidebar__link-text">Calendario</span></a
+  >
+  <a class="sidebar__link" routerLink="/notifications" routerLinkActive="sidebar__link--active"
+    >♧ <span class="sidebar__link-text">Notificaciones</span></a
   >
 
-  <div class="current-trip">
+  <div class="sidebar__current-trip">
     <!-----current trips-->
   </div>
 </aside>

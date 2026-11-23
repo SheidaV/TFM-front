@@ -1,152 +1,131 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
 :host {
   display: block;
-  color: #12355b;
+  color: $color-text;
 }
-.login-page {
+
+.login {
   padding: 28px 8%;
-  background: #f7fbff;
-}
-.login-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.8fr;
-  gap: 7%;
-  align-items: center;
-  max-width: 1080px;
-  margin: 40px auto;
-}
-.eyebrow {
-  color: #1976d2;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-}
-h1 {
-  margin: 18px 0;
-  font-size: clamp(36px, 5vw, 58px);
-  line-height: 1.05;
-  letter-spacing: -2px;
-}
-.intro-copy > p:not(.eyebrow) {
-  max-width: 520px;
-  color: #66809a;
-  font-size: 17px;
-  line-height: 1.6;
-}
-.travel-preview {
-  margin-top: 32px;
-  padding: 20px;
-  border: 1px solid #cfe0f0;
-  border-radius: 10px;
-  background: #eaf4ff;
-}
-.image-placeholder {
-  height: 170px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #c8dced;
-  border-radius: 6px;
-  color: #7893ab;
-  background: #f7fbff;
-}
-.preview-tags {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
-}
-.preview-tags span {
-  flex: 1;
-  padding: 12px 8px;
-  border-radius: 6px;
-  background: #fff;
-  color: #12355b;
-  font-size: 12px;
-  text-align: center;
-}
-.login-card {
-  padding: 32px;
-  border: 1px solid #d5e2ef;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 12px 30px #12355b0d;
-}
-.login-card h2 {
-  margin: 0 0 8px;
-  font-size: 30px;
-}
-.login-card p {
-  margin: 0 0 28px;
-  color: #71879e;
-}
-label {
-  display: block;
-  margin: 18px 0 8px;
-  font-weight: 650;
-  font-size: 13px;
-}
-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 14px;
-  border: 1px solid #cbdceb;
-  border-radius: 6px;
-  font: inherit;
-}
-.forgot {
-  display: block;
-  margin: 20px 0;
-  color: #1976d2;
-  font-size: 13px;
-}
-button {
-  width: 100%;
-  padding: 14px;
-  border: 0;
-  border-radius: 6px;
-  background: #1976d2;
-  color: #fff;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-}
-.login-card small {
-  display: block;
-  margin-top: 12px;
-  color: #71879e;
-}
-.separator {
-  height: 1px;
-  margin: 25px 0;
-  background: #e0e9f2;
-}
-.login-card .register {
-  margin: 0;
-  font-size: 13px;
-}
-a {
-  color: #1976d2;
-  text-decoration: none;
-  cursor: pointer;
-}
-@media (max-width: 800px) {
-  .login-grid {
-    grid-template-columns: 1fr;
-    margin: 50px auto;
+  background: $color-background;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.8fr;
+    gap: 7%;
+    align-items: center;
+    max-width: 1080px;
+    margin: 40px auto;
   }
-  .intro-copy {
-    display: none;
+
+  &__eyebrow {
+    color: $color-primary;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
   }
-}
-.error {
-  margin-top: 6px;
-  color: #d32f2f;
-  font-size: 12px;
-}
-.feedback {
-  margin-bottom: 8px;
-  padding: 10px 12px;
-  border: 1px solid #f2c0c0;
-  border-radius: 6px;
-  background: #fdeeee;
-  color: #d32f2f;
-  font-size: 13px;
+
+  &__title {
+    margin: 18px 0;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+  }
+
+  &__lead {
+    max-width: 520px;
+    color: $color-text-secondary;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  &__preview {
+    margin-top: 32px;
+    padding: 20px;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+    background: $color-primary-soft;
+  }
+
+  &__preview-image {
+    height: 170px;
+    display: grid;
+    place-items: center;
+    border: 1px solid $color-border-input;
+    border-radius: $radius-small;
+    color: $color-muted;
+    background: $color-background;
+  }
+
+  &__preview-tags {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  &__preview-tag {
+    flex: 1;
+    padding: 12px 8px;
+    border-radius: $radius-small;
+    background: $color-white;
+    color: $color-text;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  &__card {
+    padding: 32px;
+    border: 1px solid $color-border;
+    border-radius: $radius;
+    background: $color-white;
+    box-shadow: $shadow-card;
+
+    // more spacing than other forms
+    label {
+      margin-top: 18px;
+    }
+  }
+
+  &__card-title {
+    margin: 0 0 8px;
+    font-size: 30px;
+  }
+
+  &__card-text {
+    margin: 0 0 28px;
+    color: $color-muted;
+  }
+
+  &__alert {
+    margin-bottom: 8px;
+  }
+
+  &__forgot {
+    display: block;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+
+  &__note {
+    display: block;
+    margin-top: 12px;
+    color: $color-muted;
+  }
+
+  &__register {
+    margin: 0;
+    font-size: 13px;
+  }
+
+  @include tablet {
+    &__grid {
+      grid-template-columns: 1fr;
+      margin: 50px auto;
+    }
+
+    &__intro {
+      display: none;
+    }
+  }
 }
