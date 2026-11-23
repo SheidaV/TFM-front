@@ -1,0 +1,103 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.proposal-form {
+  padding: 22px;
+  border: 1px solid $color-primary;
+  border-radius: 8px;
+  background: $color-white;
+
+  &__title {
+    margin: 0 0 8px;
+    font-size: 20px;
+  }
+
+  &__alert {
+    margin: 8px 0;
+  }
+
+  &__legend {
+    margin-bottom: 8px;
+    font-weight: 650;
+    font-size: 13px;
+  }
+
+  &__types,
+  &__diets {
+    margin: 12px 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &__types {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__type,
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 8px 14px;
+    border: 1px solid $color-border-input;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &--checked {
+      border-color: $color-primary;
+      background: $color-primary-soft;
+      color: $color-primary;
+    }
+
+    &:focus-within {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+
+    input {
+      accent-color: $color-primary;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__optional {
+    color: $color-muted;
+    font-weight: 400;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid $color-border-input;
+    border-radius: $radius-small;
+    font: inherit;
+    resize: vertical;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  @include mobile {
+    &__row {
+      grid-template-columns: 1fr;
+    }
+  }
+}

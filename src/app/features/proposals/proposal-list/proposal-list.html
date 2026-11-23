@@ -1,1 +1,117 @@
-<p>proposal-list works!</p>
+<section class="proposal-list">
+  <div class="proposal-list__heading">
+    <div class="proposal-list__filters" role="group" aria-label="Filtrar propuestas">
+      <button
+        class="proposal-list__filter"
+        [class.proposal-list__filter--active]="filter() === 'all'"
+        (click)="filter.set('all')"
+      >
+        Todas ({{ proposals().length }})
+      </button>
+      <button
+        class="proposal-list__filter"
+        [class.proposal-list__filter--active]="filter() === 'activity'"
+        (click)="filter.set('activity')"
+      >
+        Actividades ({{ count('activity') }})
+      </button>
+      <button
+        class="proposal-list__filter"
+        [class.proposal-list__filter--active]="filter() === 'restaurant'"
+        (click)="filter.set('restaurant')"
+      >
+        Restaurantes ({{ count('restaurant') }})
+      </button>
+    </div>
+    @if (!showForm()) {
+      <button class="btn" (click)="showForm.set(true)">＋ Añadir propuesta</button>
+    }
+  </div>
+
+  @if (showForm()) {
+    <app-proposal-form
+      [tripId]="tripId()"
+      [near]="near()"
+      (created)="onCreated($event)"
+      (cancelled)="showForm.set(false)"
+    />
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert--error proposal-list__alert">{{ errorMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="proposal-list__empty">Cargando propuestas...</p>
+  } @else {
+    <div class="proposal-list__grid">
+      @for (proposal of visibleProposals(); track proposal.id) {
+        <article class="proposal-card">
+          <div class="proposal-card__top">
+            <span
+              class="proposal-card__type"
+              [class.proposal-card__type--restaurant]="proposal.type === 'restaurant'"
+              >{{ typeLabels[proposal.type] }}</span
+            >
+            @if (proposal.cost !== null) {
+              <span class="proposal-card__cost"
+                >{{ proposal.cost | number: '1.0-2' }} € / persona</span
+              >
+            }
+          </div>
+
+          <h3 class="proposal-card__title">{{ proposal.title }}</h3>
+          @if (proposal.description) {
+            <p class="proposal-card__description">{{ proposal.description }}</p>
+          }
+
+          @if (proposal.location) {
+            <p class="proposal-card__location">
+              ⌖
+              @if (mapsUrl(proposal); as url) {
+                <a [href]="url" target="_blank" rel="noopener">{{ proposal.location }}</a>
+              } @else {
+                {{ proposal.location }}
+              }
+            </p>
+          }
+
+          @if (proposal.diet_tags.length > 0) {
+            <div class="proposal-card__diets">
+              @for (tag of proposal.diet_tags; track tag) {
+                <span class="proposal-card__diet">{{ dietLabel(tag) }}</span>
+              }
+            </div>
+          }
+
+          @if (proposal.incompatible_diets.length > 0) {
+            <div class="proposal-card__warning" role="note">
+              No indica opción
+              @for (diet of proposal.incompatible_diets; track diet.tag; let last = $last) {
+                <b>{{ dietLabel(diet.tag).toLowerCase() }}</b> ({{ diet.people }}
+                {{ diet.people === 1 ? 'persona' : 'personas' }}){{ last ? '' : ',' }}
+              }
+            </div>
+          }
+
+          <app-proposal-vote [proposal]="proposal" (changed)="replace($event)" />
+
+          <div class="proposal-card__footer">
+            <span class="proposal-card__author">Propuesta de {{ proposal.created_by.name }}</span>
+            @if (proposal.can_delete) {
+              <button class="proposal-card__delete" (click)="remove(proposal)">Eliminar</button>
+            }
+          </div>
+        </article>
+      } @empty {
+        <p class="proposal-list__empty">
+          @if (proposals().length === 0) {
+            Todavía no hay propuestas. ¡Añade la primera!
+          } @else {
+            No hay propuestas de este tipo.
+          }
+        </p>
+      }
+    </div>
+  }
+</section>

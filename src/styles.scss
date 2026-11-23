@@ -30,7 +30,7 @@ label {
   font-size: 13px;
 }
 
-input {
+input:not([type='checkbox'], [type='radio']) {
   width: 100%;
   padding: 14px;
   border: 1px solid $color-border-input;

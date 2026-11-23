@@ -1,0 +1,33 @@
+<div class="proposal-vote">
+  <span class="proposal-vote__status" [class]="'proposal-vote__status--' + proposal().status">{{
+    statusLabels[proposal().status]
+  }}</span>
+
+  <div class="proposal-vote__buttons">
+    <button
+      class="proposal-vote__button"
+      [class.proposal-vote__button--for]="proposal().my_vote === 1"
+      [attr.aria-pressed]="proposal().my_vote === 1"
+      [disabled]="sending()"
+      (click)="vote(1)"
+    >
+      👍 A favor · {{ proposal().votes_for }}
+    </button>
+    <button
+      class="proposal-vote__button"
+      [class.proposal-vote__button--against]="proposal().my_vote === -1"
+      [attr.aria-pressed]="proposal().my_vote === -1"
+      [disabled]="sending()"
+      (click)="vote(-1)"
+    >
+      👎 En contra · {{ proposal().votes_against }}
+    </button>
+  </div>
+
+  @if (proposal().my_vote === null) {
+    <span class="proposal-vote__missing">Falta tu voto</span>
+  }
+  @if (errorMessage()) {
+    <span class="form-error">{{ errorMessage() }}</span>
+  }
+</div>

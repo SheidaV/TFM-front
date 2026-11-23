@@ -1,0 +1,57 @@
+<section class="vote-results">
+  @if (errorMessage()) {
+    <div class="alert alert--error">{{ errorMessage() }}</div>
+  }
+
+  @if (loading()) {
+    <p class="vote-results__empty">Cargando votaciones...</p>
+  } @else if (proposals().length === 0) {
+    <p class="vote-results__empty">Todavía no hay propuestas que votar.</p>
+  } @else {
+    <p class="vote-results__intro">
+      Una propuesta se acepta cuando vota a favor más de la mitad del grupo ({{ participants() }}
+      {{ participants() === 1 ? 'persona' : 'personas' }}).
+      @if (missingVotes() > 0) {
+        <b class="vote-results__missing"
+          >Te falta votar en {{ missingVotes() }}
+          {{ missingVotes() === 1 ? 'propuesta' : 'propuestas' }}.</b
+        >
+      }
+    </p>
+
+    @for (status of statuses; track status) {
+      @if (byStatus(status).length > 0) {
+        <h2 class="vote-results__title">
+          {{ statusLabels[status] }}s · {{ byStatus(status).length }}
+        </h2>
+        <div class="vote-results__list">
+          @for (proposal of byStatus(status); track proposal.id) {
+            <article class="vote-results__item">
+              <div class="vote-results__info">
+                <span class="vote-results__type">{{ typeLabels[proposal.type] }}</span>
+                <strong class="vote-results__name">{{ proposal.title }}</strong>
+              </div>
+              <div
+                class="vote-results__bar"
+                role="img"
+                [attr.aria-label]="
+                  proposal.votes_for + ' a favor y ' + proposal.votes_against + ' en contra'
+                "
+              >
+                <span
+                  class="vote-results__bar-for"
+                  [style.width.%]="percent(proposal.votes_for)"
+                ></span>
+                <span
+                  class="vote-results__bar-against"
+                  [style.width.%]="percent(proposal.votes_against)"
+                ></span>
+              </div>
+              <app-proposal-vote [proposal]="proposal" (changed)="replace($event)" />
+            </article>
+          }
+        </div>
+      }
+    }
+  }
+</section>

@@ -1,0 +1,64 @@
+@use 'variables' as *;
+
+.vote-results {
+  &__intro,
+  &__empty {
+    color: $color-muted;
+    font-size: 13px;
+  }
+
+  &__missing {
+    color: $color-warning;
+  }
+
+  &__title {
+    margin: 24px 0 10px;
+    font-size: 16px;
+  }
+
+  &__list {
+    display: grid;
+    gap: 10px;
+  }
+
+  &__item {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border: 1px solid $color-border;
+    border-radius: 8px;
+    background: $color-white;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__type {
+    color: $color-muted;
+    font-size: 12px;
+  }
+
+  &__name {
+    font-size: 15px;
+  }
+
+  &__bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    background: $color-divider;
+    overflow: hidden;
+  }
+
+  &__bar-for {
+    background: $color-finished;
+  }
+
+  &__bar-against {
+    margin-left: auto;
+    background: $color-danger;
+  }
+}

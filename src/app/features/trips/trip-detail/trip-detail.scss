@@ -49,14 +49,41 @@
   }
 
   &__tab {
+    margin-bottom: -17px;
+    padding: 0 0 17px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
     color: $color-muted;
+    font: inherit;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
 
     &--active {
-      padding-bottom: 17px;
-      border-bottom: 2px solid $color-primary;
+      border-bottom-color: $color-primary;
       color: $color-primary;
       font-weight: 700;
     }
+  }
+
+  &__section {
+    margin-top: 24px;
+  }
+
+  &__info-link {
+    justify-self: start;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $color-primary;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
   }
 
   &__destination {

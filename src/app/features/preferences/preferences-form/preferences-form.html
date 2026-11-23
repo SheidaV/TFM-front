@@ -1,1 +1,97 @@
-<p>preferences-form works!</p>
+<div class="preferences-form">
+  <form class="preferences-form__panel" [formGroup]="preferencesForm" (ngSubmit)="save()">
+    <h2 class="preferences-form__title">Mis preferencias</h2>
+    <p class="preferences-form__text">
+      Solo el resumen del grupo es visible para los demás, no lo que marca cada persona.
+    </p>
+
+    @if (errorMessage()) {
+      <div class="alert alert--error preferences-form__alert">{{ errorMessage() }}</div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert--success preferences-form__alert">{{ successMessage() }}</div>
+    }
+
+    <fieldset class="preferences-form__group">
+      <legend class="preferences-form__legend">Alimentación</legend>
+      <div class="preferences-form__options">
+        @for (option of foodOptions; track option.value) {
+          <label
+            class="preferences-form__chip"
+            [class.preferences-form__chip--checked]="isChecked(food, option.value)"
+          >
+            <input
+              class="preferences-form__checkbox"
+              type="checkbox"
+              [checked]="isChecked(food, option.value)"
+              (change)="toggle(food, option.value)"
+            />
+            {{ option.label }}
+          </label>
+        }
+      </div>
+      <p class="form-hint">Déjalo vacío si no tienes ninguna restricción.</p>
+    </fieldset>
+
+    <fieldset class="preferences-form__group">
+      <legend class="preferences-form__legend">Intereses</legend>
+      <div class="preferences-form__options">
+        @for (option of activityOptions; track option.value) {
+          <label
+            class="preferences-form__chip"
+            [class.preferences-form__chip--checked]="isChecked(activities, option.value)"
+          >
+            <input
+              class="preferences-form__checkbox"
+              type="checkbox"
+              [checked]="isChecked(activities, option.value)"
+              (change)="toggle(activities, option.value)"
+            />
+            {{ option.label }}
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <button class="btn preferences-form__submit" type="submit" [disabled]="saving()">
+      {{ group()?.mine ? 'Guardar cambios' : 'Guardar preferencias' }}
+    </button>
+  </form>
+
+  <aside class="preferences-form__panel">
+    <h2 class="preferences-form__title">Preferencias del grupo</h2>
+    @if (group(); as group) {
+      <p class="preferences-form__text">
+        {{ group.responses }} de {{ group.participants }}
+        {{ group.participants === 1 ? 'persona ha' : 'personas han' }} respondido
+      </p>
+
+      @if (group.responses === 0) {
+        <p class="preferences-form__empty">Todavía nadie ha indicado sus preferencias.</p>
+      } @else {
+        <h3 class="preferences-form__subtitle">Alimentación</h3>
+        @for (row of foodSummary(); track row.label) {
+          <div class="preferences-form__row">
+            <span class="preferences-form__row-label">{{ row.label }}</span>
+            <span class="preferences-form__row-count">{{ row.count }}</span>
+          </div>
+        } @empty {
+          <p class="preferences-form__empty">Nadie ha indicado restricciones.</p>
+        }
+
+        <h3 class="preferences-form__subtitle">Intereses</h3>
+        @for (row of activitySummary(); track row.label) {
+          <div class="preferences-form__row">
+            <span class="preferences-form__row-label">{{ row.label }}</span>
+            <span class="preferences-form__bar" aria-hidden="true">
+              <span class="preferences-form__bar-fill" [style.width.%]="row.percent"></span>
+            </span>
+            <span class="preferences-form__row-count">{{ row.count }}</span>
+          </div>
+        } @empty {
+          <p class="preferences-form__empty">Nadie ha marcado intereses.</p>
+        }
+      }
+    }
+  </aside>
+</div>

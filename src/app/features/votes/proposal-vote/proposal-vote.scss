@@ -1,0 +1,71 @@
+@use 'variables' as *;
+
+.proposal-vote {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  &__status {
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+
+    &--accepted {
+      background: $color-finished-soft;
+      color: $color-finished;
+    }
+
+    &--pending {
+      background: $color-primary-soft;
+      color: $color-primary;
+    }
+
+    &--rejected {
+      background: $color-danger-soft;
+      color: $color-danger;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  &__button {
+    padding: 6px 10px;
+    border: 1px solid $color-border-input;
+    border-radius: 20px;
+    background: $color-white;
+    color: $color-text-secondary;
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+
+    &--for {
+      border-color: $color-finished;
+      background: $color-finished-soft;
+      color: $color-finished;
+      font-weight: 700;
+    }
+
+    &--against {
+      border-color: $color-danger;
+      background: $color-danger-soft;
+      color: $color-danger;
+      font-weight: 700;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  &__missing {
+    color: $color-warning;
+    font-size: 12px;
+    font-weight: 600;
+  }
+}

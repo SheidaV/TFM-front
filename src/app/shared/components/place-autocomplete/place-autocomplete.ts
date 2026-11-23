@@ -2,7 +2,7 @@ import { Component, DestroyRef, forwardRef, input, OnInit, signal } from '@angul
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { catchError, debounceTime, distinctUntilChanged, of, Subject, switchMap } from 'rxjs';
-import { Place } from '../../../core/models/place';
+import { Place, PlaceScope } from '../../../core/models/place';
 import { Places } from '../../../core/services/places';
 
 // input with place suggestions, value is the selected Place or null
@@ -21,6 +21,8 @@ import { Places } from '../../../core/services/places';
 export class PlaceAutocomplete implements ControlValueAccessor, OnInit {
   inputId = input('destination');
   placeholder = input('Busca una ciudad, región o país');
+  scope = input<PlaceScope>('region');
+  near = input<{ lat: number; lon: number } | null>(null);
 
   text = signal('');
   suggestions = signal<Place[]>([]);
@@ -49,7 +51,9 @@ export class PlaceAutocomplete implements ControlValueAccessor, OnInit {
             return of([]);
           }
           this.searching.set(true);
-          return this.places.search(text).pipe(catchError(() => of([])));
+          return this.places
+            .search(text, { scope: this.scope(), near: this.near() })
+            .pipe(catchError(() => of([])));
         }),
         takeUntilDestroyed(this.destroyRef),
       )

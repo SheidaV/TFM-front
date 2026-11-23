@@ -7,11 +7,26 @@ import { Trips } from '../../../core/services/trips';
 import { getErrorMessage } from '../../../core/utils/api-error';
 import { getTripStatus, tripStatusLabels } from '../../../core/utils/trip-status';
 import { TripMap } from '../../../shared/components/trip-map/trip-map';
+import { PreferencesForm } from '../../preferences/preferences-form/preferences-form';
+import { ProposalList } from '../../proposals/proposal-list/proposal-list';
+import { VoteResults } from '../../votes/vote-results/vote-results';
+import { TripParticipants } from '../trip-participants/trip-participants';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+type TripTab = 'summary' | 'participants' | 'preferences' | 'proposals' | 'votes';
+
 @Component({
-  imports: [RouterLink, DatePipe, DecimalPipe, TripMap],
+  imports: [
+    RouterLink,
+    DatePipe,
+    DecimalPipe,
+    TripMap,
+    TripParticipants,
+    PreferencesForm,
+    ProposalList,
+    VoteResults,
+  ],
   selector: 'app-trip-detail',
   styleUrl: './trip-detail.scss',
   templateUrl: './trip-detail.html',
@@ -19,6 +34,21 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 export class TripDetail implements OnInit {
   trip = signal<TripDto | null>(null);
   errorMessage = signal<string | null>(null);
+  tab = signal<TripTab>('summary');
+  tabLabels: Record<TripTab, string> = {
+    summary: 'Resumen',
+    participants: 'Participantes',
+    preferences: 'Preferencias',
+    proposals: 'Propuestas',
+    votes: 'Votaciones',
+  };
+
+  near = computed(() => {
+    const trip = this.trip();
+    return trip && trip.destination_lat !== null && trip.destination_lon !== null
+      ? { lat: trip.destination_lat, lon: trip.destination_lon }
+      : null;
+  });
 
   isOwner = computed(() => this.trip()?.role === 'owner');
   status = computed(() => {
@@ -53,6 +83,10 @@ export class TripDetail implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.loadTrip();
+  }
+
+  async loadTrip(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id')!;
     try {
       this.trip.set(await this.trips.getById(id));

@@ -24,74 +24,134 @@
     </div>
 
     <div class="trip-detail__breadcrumbs">
-      <a routerLink="/dashboard">Mis viajes</a> / {{ trip.name }} / Resumen
+      <a routerLink="/dashboard">Mis viajes</a> / {{ trip.name }} /
+      {{ tabLabels[tab()] }}
     </div>
 
-    <nav class="trip-detail__tabs">
-      <span class="trip-detail__tab trip-detail__tab--active">Resumen</span
-      ><span class="trip-detail__tab">Propuestas</span
-      ><span class="trip-detail__tab">Votaciones</span
-      ><span class="trip-detail__tab">Itinerario</span>
+    <nav class="trip-detail__tabs" aria-label="Secciones del viaje">
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'summary'"
+        [attr.aria-current]="tab() === 'summary' ? 'page' : null"
+        (click)="tab.set('summary')"
+      >
+        Resumen
+      </button>
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'participants'"
+        [attr.aria-current]="tab() === 'participants' ? 'page' : null"
+        (click)="tab.set('participants')"
+      >
+        Participantes ({{ trip.participants_count }})
+      </button>
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'preferences'"
+        [attr.aria-current]="tab() === 'preferences' ? 'page' : null"
+        (click)="tab.set('preferences')"
+      >
+        Preferencias
+      </button>
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'proposals'"
+        [attr.aria-current]="tab() === 'proposals' ? 'page' : null"
+        (click)="tab.set('proposals')"
+      >
+        Propuestas
+      </button>
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'votes'"
+        [attr.aria-current]="tab() === 'votes' ? 'page' : null"
+        (click)="tab.set('votes')"
+      >
+        Votaciones
+      </button>
+      <button class="trip-detail__tab" disabled title="Próximamente">Itinerario</button>
     </nav>
 
-    <article class="trip-detail__destination">
-      <div class="trip-detail__map">
-        @if (trip.destination_lat !== null && trip.destination_lon !== null) {
-          <app-trip-map
-            [lat]="trip.destination_lat"
-            [lon]="trip.destination_lon"
-            [label]="trip.destination"
-          />
-        } @else {
-          {{ trip.destination }}
-        }
-      </div>
-      <div>
-        <h2 class="trip-detail__destination-title">
-          {{ trip.destination }}, para descubrirlo juntos
-        </h2>
-        <p class="trip-detail__destination-text">
-          Viaje compartido · {{ statusLabels[status()!] }} ·
-          {{ isOwner() ? 'Organizas tú' : 'Participas' }}
-        </p>
-        @if (googleMapsUrl(); as url) {
-          <a class="trip-detail__maps-link" [href]="url" target="_blank" rel="noopener"
-            >Ver en Google Maps ↗</a
-          >
-        }
-      </div>
-    </article>
-
-    <article class="trip-detail__panel">
-      <h2 class="trip-detail__panel-title">Datos del viaje</h2>
-      <div class="trip-detail__info">
-        <div class="trip-detail__info-item">
-          <small class="trip-detail__info-label">Fechas</small>
-          <strong class="trip-detail__info-value"
-            >{{ trip.start_date | date: 'd MMM' }} – {{ trip.end_date | date: 'd MMM y' }}</strong
-          >
-          <span class="trip-detail__info-detail"
-            >{{ days() }} día{{ days() === 1 ? '' : 's' }}</span
-          >
-        </div>
-        <div class="trip-detail__info-item">
-          <small class="trip-detail__info-label">Presupuesto</small>
-          @if (trip.budget !== null) {
-            <strong class="trip-detail__info-value">{{ trip.budget | number: '1.0-2' }} €</strong>
-            <span class="trip-detail__info-detail">Por persona</span>
+    @if (tab() === 'summary') {
+      <article class="trip-detail__destination">
+        <div class="trip-detail__map">
+          @if (trip.destination_lat !== null && trip.destination_lon !== null) {
+            <app-trip-map
+              [lat]="trip.destination_lat"
+              [lon]="trip.destination_lon"
+              [label]="trip.destination"
+            />
           } @else {
-            <strong class="trip-detail__info-value">Sin definir</strong>
-            <span class="trip-detail__info-detail">Se puede añadir al editar</span>
+            {{ trip.destination }}
           }
         </div>
-        <div class="trip-detail__info-item">
-          <small class="trip-detail__info-label">Grupo</small>
-          <strong class="trip-detail__info-value">
-            {{ trip.participants_count }} participante{{ trip.participants_count === 1 ? '' : 's' }}
-          </strong>
-          <span class="trip-detail__info-detail">Invitaciones en la siguiente iteración</span>
+        <div>
+          <h2 class="trip-detail__destination-title">
+            {{ trip.destination }}, para descubrirlo juntos
+          </h2>
+          <p class="trip-detail__destination-text">
+            Viaje compartido · {{ statusLabels[status()!] }} ·
+            {{ isOwner() ? 'Organizas tú' : 'Participas' }}
+          </p>
+          @if (googleMapsUrl(); as url) {
+            <a class="trip-detail__maps-link" [href]="url" target="_blank" rel="noopener"
+              >Ver en Google Maps ↗</a
+            >
+          }
         </div>
+      </article>
+
+      <article class="trip-detail__panel">
+        <h2 class="trip-detail__panel-title">Datos del viaje</h2>
+        <div class="trip-detail__info">
+          <div class="trip-detail__info-item">
+            <small class="trip-detail__info-label">Fechas</small>
+            <strong class="trip-detail__info-value"
+              >{{ trip.start_date | date: 'd MMM' }} – {{ trip.end_date | date: 'd MMM y' }}</strong
+            >
+            <span class="trip-detail__info-detail"
+              >{{ days() }} día{{ days() === 1 ? '' : 's' }}</span
+            >
+          </div>
+          <div class="trip-detail__info-item">
+            <small class="trip-detail__info-label">Presupuesto</small>
+            @if (trip.budget !== null) {
+              <strong class="trip-detail__info-value">{{ trip.budget | number: '1.0-2' }} €</strong>
+              <span class="trip-detail__info-detail">Por persona</span>
+            } @else {
+              <strong class="trip-detail__info-value">Sin definir</strong>
+              <span class="trip-detail__info-detail">Se puede añadir al editar</span>
+            }
+          </div>
+          <div class="trip-detail__info-item">
+            <small class="trip-detail__info-label">Grupo</small>
+            <strong class="trip-detail__info-value">
+              {{ trip.participants_count }} participante{{
+                trip.participants_count === 1 ? '' : 's'
+              }}
+            </strong>
+            <button class="trip-detail__info-link" (click)="tab.set('participants')">
+              Ver el grupo
+            </button>
+          </div>
+        </div>
+      </article>
+    } @else if (tab() === 'participants') {
+      <div class="trip-detail__section">
+        <app-trip-participants [tripId]="trip.id" [isOwner]="isOwner()" (changed)="loadTrip()" />
       </div>
-    </article>
+    } @else if (tab() === 'preferences') {
+      <div class="trip-detail__section">
+        <app-preferences-form [tripId]="trip.id" />
+      </div>
+    } @else if (tab() === 'proposals') {
+      <div class="trip-detail__section">
+        <app-proposal-list [tripId]="trip.id" [near]="near()" />
+      </div>
+    } @else {
+      <div class="trip-detail__section">
+        <app-vote-results [tripId]="trip.id" [participants]="trip.participants_count" />
+      </div>
+    }
   }
 </section>

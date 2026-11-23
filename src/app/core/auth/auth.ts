@@ -37,6 +37,10 @@ export class Auth {
     return this.localStorage.get('access_token');
   }
 
+  getUserId(): string | null {
+    return this.localStorage.get('user_id');
+  }
+
   isLoggedIn(): boolean {
     return this.getToken() !== null;
   }

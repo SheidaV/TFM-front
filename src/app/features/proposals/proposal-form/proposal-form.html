@@ -1,1 +1,118 @@
-<p>proposal-form works!</p>
+<form class="proposal-form" [formGroup]="proposalForm" (ngSubmit)="save()">
+  <h2 class="proposal-form__title">Nueva propuesta</h2>
+
+  @if (errorMessage()) {
+    <div class="alert alert--error proposal-form__alert">{{ errorMessage() }}</div>
+  }
+
+  <fieldset class="proposal-form__types">
+    <legend class="proposal-form__legend">Tipo</legend>
+    <label
+      class="proposal-form__type"
+      [class.proposal-form__type--checked]="type.value === 'activity'"
+    >
+      <input type="radio" value="activity" [formControl]="type" /> Actividad
+    </label>
+    <label
+      class="proposal-form__type"
+      [class.proposal-form__type--checked]="type.value === 'restaurant'"
+    >
+      <input type="radio" value="restaurant" [formControl]="type" /> Restaurante
+    </label>
+  </fieldset>
+
+  <label for="proposal-title">Título</label>
+  <input
+    id="proposal-title"
+    type="text"
+    [placeholder]="
+      type.value === 'restaurant' ? 'Cena en Bodegas Castañeda' : 'Visita a la Alhambra'
+    "
+    [formControl]="title"
+  />
+  @if (title.errors && isValidForm() === false) {
+    <div class="form-error">
+      @if (title.errors['required']) {
+        <div>El título es obligatorio</div>
+      }
+      @if (title.errors['minlength']) {
+        <div>El título debe tener al menos 3 caracteres</div>
+      }
+      @if (title.errors['maxlength']) {
+        <div>El título puede tener 120 caracteres como máximo</div>
+      }
+    </div>
+  }
+
+  <label for="proposal-description"
+    >Descripción <small class="proposal-form__optional">opcional</small></label
+  >
+  <textarea
+    id="proposal-description"
+    class="proposal-form__textarea"
+    rows="3"
+    placeholder="Horario, por qué te apetece, enlace a la web..."
+    [formControl]="description"
+  ></textarea>
+  @if (description.errors && isValidForm() === false) {
+    <div class="form-error">La descripción puede tener 1000 caracteres como máximo</div>
+  }
+
+  <div class="proposal-form__row">
+    <div>
+      <label for="proposal-location"
+        >Ubicación <small class="proposal-form__optional">opcional</small></label
+      >
+      <app-place-autocomplete
+        inputId="proposal-location"
+        placeholder="Busca el lugar"
+        scope="any"
+        [near]="near()"
+        [formControl]="location"
+      />
+    </div>
+    <div>
+      <label for="proposal-cost"
+        >Coste por persona (€) <small class="proposal-form__optional">opcional</small></label
+      >
+      <input
+        id="proposal-cost"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="20"
+        [formControl]="cost"
+      />
+      @if (cost.errors && isValidForm() === false) {
+        <div class="form-error">El coste no puede ser negativo</div>
+      }
+    </div>
+  </div>
+
+  @if (type.value === 'restaurant') {
+    <fieldset class="proposal-form__diets">
+      <legend class="proposal-form__legend">Opciones que ofrece el restaurante</legend>
+      <div class="proposal-form__chips">
+        @for (option of foodOptions; track option.value) {
+          <label
+            class="proposal-form__chip"
+            [class.proposal-form__chip--checked]="dietTags.value.includes(option.value)"
+          >
+            <input
+              type="checkbox"
+              [checked]="dietTags.value.includes(option.value)"
+              (change)="toggleDiet(option.value)"
+            />
+            {{ option.label }}
+          </label>
+        }
+      </div>
+      <p class="form-hint">Así el grupo verá si encaja con sus restricciones alimentarias.</p>
+    </fieldset>
+  }
+
+  <div class="proposal-form__actions">
+    <button class="btn btn--outline" type="button" (click)="cancelled.emit()">Cancelar</button>
+    <button class="btn" type="submit" [disabled]="saving()">Añadir propuesta</button>
+  </div>
+</form>

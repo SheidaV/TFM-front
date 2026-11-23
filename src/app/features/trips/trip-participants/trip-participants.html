@@ -1,0 +1,66 @@
+<article class="trip-participants">
+  <div class="trip-participants__heading">
+    <h2 class="trip-participants__title">El grupo · {{ participants().length }}</h2>
+    @if (!isOwner()) {
+      <button class="btn btn--danger btn--small" (click)="leave()">Salir del viaje</button>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert--error trip-participants__alert">{{ errorMessage() }}</div>
+  }
+  @if (successMessage()) {
+    <div class="alert alert--success trip-participants__alert">{{ successMessage() }}</div>
+  }
+
+  @if (isOwner()) {
+    <form class="trip-participants__invite" [formGroup]="inviteForm" (ngSubmit)="invite()">
+      <label class="trip-participants__invite-label" for="identifier">Invitar al grupo</label>
+      <div class="trip-participants__invite-row">
+        <input
+          id="identifier"
+          type="text"
+          placeholder="Alias o correo electrónico"
+          autocomplete="off"
+          [formControl]="identifier"
+        />
+        <button class="btn" type="submit" [disabled]="inviting()">Invitar</button>
+      </div>
+      @if (identifier.invalid && identifier.touched) {
+        <div class="form-error">Escribe un alias o un correo (mínimo 3 caracteres)</div>
+      }
+    </form>
+  }
+
+  <ul class="trip-participants__list">
+    @for (participant of participants(); track participant.user_id) {
+      <li class="trip-participants__item">
+        <span class="trip-participants__avatar">{{ initials(participant) }}</span>
+        <div class="trip-participants__info">
+          <strong class="trip-participants__name">
+            {{ participant.name }} {{ participant.surname }}
+            @if (isMe(participant)) {
+              <span class="trip-participants__me">(tú)</span>
+            }
+          </strong>
+          <span class="trip-participants__alias">&#64;{{ participant.alias }}</span>
+        </div>
+        <span
+          class="trip-participants__role"
+          [class.trip-participants__role--owner]="participant.role === 'owner'"
+        >
+          {{ participant.role === 'owner' ? 'Organizador' : 'Participante' }}
+        </span>
+        @if (isOwner() && !isMe(participant)) {
+          <button
+            class="trip-participants__remove"
+            [attr.aria-label]="'Quitar a ' + participant.name"
+            (click)="remove(participant)"
+          >
+            Quitar
+          </button>
+        }
+      </li>
+    }
+  </ul>
+</article>

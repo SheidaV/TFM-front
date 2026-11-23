@@ -67,7 +67,7 @@
   } @else {
     <div class="trip-list__grid">
       @for (trip of visibleTrips(); track trip.id) {
-        <article class="trip-card">
+        <article class="trip-card" [routerLink]="['/trips', trip.id]">
           <div class="trip-card__image">{{ trip.destination }}</div>
           <span class="trip-card__status" [class]="'trip-card__status--' + status(trip)">{{
             statusLabels[status(trip)]
