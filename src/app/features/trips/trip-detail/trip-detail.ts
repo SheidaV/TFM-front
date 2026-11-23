@@ -10,11 +10,12 @@ import { TripMap } from '../../../shared/components/trip-map/trip-map';
 import { PreferencesForm } from '../../preferences/preferences-form/preferences-form';
 import { ProposalList } from '../../proposals/proposal-list/proposal-list';
 import { VoteResults } from '../../votes/vote-results/vote-results';
+import { ItineraryView } from '../../itinerary/itinerary-view/itinerary-view';
 import { TripParticipants } from '../trip-participants/trip-participants';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-type TripTab = 'summary' | 'participants' | 'preferences' | 'proposals' | 'votes';
+type TripTab = 'summary' | 'participants' | 'preferences' | 'proposals' | 'votes' | 'itinerary';
 
 @Component({
   imports: [
@@ -26,6 +27,7 @@ type TripTab = 'summary' | 'participants' | 'preferences' | 'proposals' | 'votes
     PreferencesForm,
     ProposalList,
     VoteResults,
+    ItineraryView,
   ],
   selector: 'app-trip-detail',
   styleUrl: './trip-detail.scss',
@@ -41,6 +43,7 @@ export class TripDetail implements OnInit {
     preferences: 'Preferencias',
     proposals: 'Propuestas',
     votes: 'Votaciones',
+    itinerary: 'Itinerario',
   };
 
   near = computed(() => {

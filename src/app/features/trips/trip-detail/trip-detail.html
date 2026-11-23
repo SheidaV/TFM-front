@@ -69,7 +69,14 @@
       >
         Votaciones
       </button>
-      <button class="trip-detail__tab" disabled title="Próximamente">Itinerario</button>
+      <button
+        class="trip-detail__tab"
+        [class.trip-detail__tab--active]="tab() === 'itinerary'"
+        [attr.aria-current]="tab() === 'itinerary' ? 'page' : null"
+        (click)="tab.set('itinerary')"
+      >
+        Itinerario
+      </button>
     </nav>
 
     @if (tab() === 'summary') {
@@ -148,9 +155,13 @@
       <div class="trip-detail__section">
         <app-proposal-list [tripId]="trip.id" [near]="near()" />
       </div>
-    } @else {
+    } @else if (tab() === 'votes') {
       <div class="trip-detail__section">
         <app-vote-results [tripId]="trip.id" [participants]="trip.participants_count" />
+      </div>
+    } @else {
+      <div class="trip-detail__section">
+        <app-itinerary-view [tripId]="trip.id" />
       </div>
     }
   }

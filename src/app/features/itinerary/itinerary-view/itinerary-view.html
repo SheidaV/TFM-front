@@ -1,1 +1,116 @@
-<p>itinerary-view works!</p>
+@if (itinerary(); as itinerary) {
+  <section class="itinerary">
+    <div class="itinerary__days">
+      @if (!itinerary.can_edit) {
+        <p class="itinerary__note">Solo el organizador puede editar el itinerario.</p>
+      }
+      @if (isEmpty()) {
+        <p class="itinerary__note">
+          Todavía no hay propuestas aceptadas. Cuando el grupo vote a favor de alguna, podrás
+          añadirla aquí.
+        </p>
+      }
+
+      @for (day of itinerary.days; track day.date) {
+        <article class="itinerary__day" [class.itinerary__day--outside]="day.outside_trip">
+          <h3 class="itinerary__day-title">
+            {{ day.date | date: 'EEEE d MMMM' }}
+            @if (day.outside_trip) {
+              <span class="itinerary__outside">Fuera de las fechas del viaje</span>
+            }
+          </h3>
+
+          @for (item of day.items; track item.id) {
+            <div class="itinerary__item">
+              <span class="itinerary__time">{{ item.start_time }} – {{ item.end_time }}</span>
+              <div class="itinerary__info">
+                <strong class="itinerary__title">{{ item.proposal.title }}</strong>
+                <span class="itinerary__meta">
+                  {{ typeLabels[item.proposal.type] }}
+                  @if (item.proposal.location) {
+                    · {{ item.proposal.location }}
+                  }
+                </span>
+                @if (item.proposal.status !== 'accepted') {
+                  <span class="itinerary__warning">Ya no está aceptada en las votaciones</span>
+                }
+              </div>
+              @if (itinerary.can_edit) {
+                <div class="itinerary__actions">
+                  <button class="itinerary__link" (click)="startEdit(item, day.date)">
+                    Editar
+                  </button>
+                  <button class="itinerary__link itinerary__link--danger" (click)="remove(item)">
+                    Quitar
+                  </button>
+                </div>
+              }
+            </div>
+          } @empty {
+            <p class="itinerary__free">Día libre</p>
+          }
+        </article>
+      }
+    </div>
+
+    <aside class="itinerary__side">
+      @if (editing(); as current) {
+        <form class="itinerary__panel" [formGroup]="slotForm" (ngSubmit)="save()">
+          <h3 class="itinerary__panel-title">
+            {{ current.kind === 'add' ? 'Añadir' : 'Editar' }}: {{ editingTitle(current) }}
+          </h3>
+
+          @if (errorMessage()) {
+            <div class="alert alert--error itinerary__alert">{{ errorMessage() }}</div>
+          }
+
+          <label for="slot-date">Día</label>
+          <select id="slot-date" class="itinerary__select" [formControl]="date">
+            @for (day of tripDays(); track day.date) {
+              <option [value]="day.date">{{ day.date | date: 'EEEE d MMM' }}</option>
+            }
+          </select>
+
+          <div class="itinerary__times">
+            <div>
+              <label for="slot-start">Inicio</label>
+              <input id="slot-start" type="time" [formControl]="startTime" />
+            </div>
+            <div>
+              <label for="slot-end">Fin</label>
+              <input id="slot-end" type="time" [formControl]="endTime" />
+            </div>
+          </div>
+
+          <div class="itinerary__form-actions">
+            <button class="btn btn--outline btn--small" type="button" (click)="cancel()">
+              Cancelar
+            </button>
+            <button class="btn btn--small" type="submit" [disabled]="saving()">Guardar</button>
+          </div>
+        </form>
+      }
+
+      <div class="itinerary__panel">
+        <h3 class="itinerary__panel-title">Aceptadas por programar</h3>
+        @for (proposal of itinerary.available; track proposal.id) {
+          <div class="itinerary__available">
+            <div class="itinerary__info">
+              <strong class="itinerary__title">{{ proposal.title }}</strong>
+              <span class="itinerary__meta">{{ typeLabels[proposal.type] }}</span>
+            </div>
+            @if (itinerary.can_edit) {
+              <button class="btn btn--outline btn--small" (click)="startAdd(proposal)">
+                Añadir
+              </button>
+            }
+          </div>
+        } @empty {
+          <p class="itinerary__note">No hay propuestas aceptadas pendientes de programar.</p>
+        }
+      </div>
+    </aside>
+  </section>
+} @else if (errorMessage()) {
+  <div class="alert alert--error">{{ errorMessage() }}</div>
+}
